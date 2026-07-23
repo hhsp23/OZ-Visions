@@ -30,15 +30,15 @@ test("server renders the OZ Visions temporary site", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>OZ Visions USA \| Film, Media &amp; Production<\/title>/i);
-  assert.match(html, /Independent stories\./);
-  assert.match(html, /Commercial craft\./);
-  assert.match(html, /id="about"/);
+  assert.match(html, /Independent productions and creative media/);
+  assert.match(html, /Original stories and production craft under one roof\./);
+  assert.match(html, /id="vision"/);
   assert.match(html, /id="productions"/);
   assert.match(html, /id="services"/);
   assert.match(html, /id="world"/);
   assert.match(html, /id="contact"/);
   assert.match(html, /https:\/\/www\.linkedin\.com\/company\/ozpictures/);
-  assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
+  assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|\[pending\]|placeholder/i);
 });
 
 test("keeps the final site responsive and self contained", async () => {
@@ -61,5 +61,8 @@ test("keeps the final site responsive and self contained", async () => {
     access(new URL("../public/assets/oz-horizon.webp", import.meta.url)),
     access(new URL("../public/assets/production-still.webp", import.meta.url)),
     access(new URL("../public/assets/services-still.webp", import.meta.url)),
+    access(new URL("../public/assets/noise.webp", import.meta.url)),
+    access(new URL("../public/favicon.ico", import.meta.url)),
+    access(new URL("../public/og.png", import.meta.url)),
   ]);
 });

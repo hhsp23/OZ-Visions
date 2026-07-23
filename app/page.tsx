@@ -1,6 +1,36 @@
 import Image from "next/image";
 import { MobileMenu } from "./MobileMenu";
 
+const navigation = [
+  { label: "Vision", href: "#vision" },
+  { label: "Productions", href: "#productions" },
+  { label: "Services", href: "#services" },
+  { label: "The Four Quarters", href: "#world" },
+];
+
+const chapters = [
+  {
+    title: "Vision and principles",
+    description: "The ideas that guide the work and the company.",
+    href: "#vision",
+  },
+  {
+    title: "Productions",
+    description: "Four original titles in development.",
+    href: "#productions",
+  },
+  {
+    title: "Commercial services",
+    description: "Film, media, podcast, brand, and event production.",
+    href: "#services",
+  },
+  {
+    title: "The Four Quarters",
+    description: "A growing story world of lore and concept art.",
+    href: "#world",
+  },
+];
+
 const productions = [
   "Manhood",
   "Exegesis",
@@ -8,29 +38,23 @@ const productions = [
   "The Primus Voyage",
 ];
 
-const serviceGroups = [
+const services = [
   {
-    title: "Creative production",
-    description:
-      "Commercials, music videos, narrative film, creative direction, and custom production.",
+    title: "Creative and media production",
+    items: ["Creative production", "Media production", "Event coverage"],
   },
   {
-    title: "Media and podcast",
-    description:
-      "Podcast production, digital media, event coverage, interviews, and multi-camera capture.",
+    title: "Sound and conversation",
+    items: ["Podcast production"],
   },
   {
-    title: "Brand and consulting",
-    description:
-      "Brand development, campaign planning, production strategy, and focused creative consulting.",
+    title: "Brand and direction",
+    items: ["Brand development", "Consulting"],
   },
-];
-
-const navigation = [
-  { label: "About", href: "#about" },
-  { label: "Productions", href: "#productions" },
-  { label: "Services", href: "#services" },
-  { label: "The Four Quarters", href: "#world" },
+  {
+    title: "Built around the brief",
+    items: ["Custom services"],
+  },
 ];
 
 function Wordmark({ footer = false }: { footer?: boolean }) {
@@ -88,59 +112,97 @@ export default function Home() {
             sizes="100vw"
           />
           <div className="hero-shade" aria-hidden="true" />
+
           <div className="hero-content">
-            <div className="spectral-line" aria-hidden="true" />
             <h1 id="hero-title">
-              <span>Independent stories.</span>
-              <span>Commercial craft.</span>
+              <span>OZ</span>
+              <span>Visions</span>
             </h1>
-            <p>
-              OZ Visions creates film, media, podcasts, brands, and live
-              coverage from Austin, Texas.
+            <p className="hero-tagline">
+              Independent productions and creative media
             </p>
             <div className="hero-actions">
-              <a className="button button-primary" href="#contact">
-                Start a project
-              </a>
-              <a className="button button-secondary" href="#productions">
+              <a className="button button-primary" href="#productions">
                 View productions
+              </a>
+              <a className="button button-secondary" href="#contact">
+                Start a project
               </a>
             </div>
           </div>
         </section>
 
-        <section
-          className="section about"
-          id="about"
-          aria-labelledby="about-title"
-        >
-          <div className="section-shell about-grid">
+        <div className="spectrum-rule" aria-hidden="true" />
+
+        <section className="intro section" aria-labelledby="intro-title">
+          <div className="section-shell intro-grid">
+            <p className="section-label">OZ Visions USA</p>
             <div>
-              <p className="section-label">OZ Visions USA</p>
-              <h2 id="about-title">
-                A production company for ambitious ideas.
+              <h2 id="intro-title">
+                Original stories and production craft under one roof.
               </h2>
-            </div>
-            <div className="about-copy">
-              <p className="lead">
-                We develop original worlds and help clients shape clear,
-                cinematic work across film, sound, brand, and live media.
+              <p className="intro-copy">
+                OZ Visions develops independent films and story worlds while
+                creating commercial work for brands, artists, and
+                collaborators.
               </p>
-              <div className="principles" aria-label="Company principles">
-                <div>
-                  <h3>Story first</h3>
+            </div>
+          </div>
+        </section>
+
+        <nav className="chapter-shell" aria-label="Explore OZ Visions">
+          <div className="chapter-grid">
+            {chapters.map((chapter, index) => (
+              <a
+                className={`chapter chapter-${index + 1}`}
+                href={chapter.href}
+                key={chapter.href}
+              >
+                <span className="chapter-title">{chapter.title}</span>
+                <span className="chapter-description">
+                  {chapter.description}
+                </span>
+                <span className="chapter-action">Explore</span>
+              </a>
+            ))}
+          </div>
+        </nav>
+
+        <section
+          className="section vision"
+          id="vision"
+          aria-labelledby="vision-title"
+        >
+          <div className="section-shell vision-grid">
+            <div className="vision-heading">
+              <h2 id="vision-title">Make the image mean something.</h2>
+            </div>
+            <div className="vision-copy">
+              <p className="lead">
+                We believe cinematic work should feel clear, immersive, and
+                emotionally exact. The spectacle matters, but the story gives
+                it purpose.
+              </p>
+              <p>
+                Our long-term vision joins original productions with a flexible
+                studio practice, bringing the same narrative care to client
+                work, podcasts, live coverage, and brand development.
+              </p>
+              <div className="principles">
+                <article>
+                  <h3>Story gives form</h3>
                   <p>
-                    Narrative thinking guides every format, from a short
-                    campaign to a long-form production.
+                    Every visual and production choice begins with the idea it
+                    needs to carry.
                   </p>
-                </div>
-                <div>
-                  <h3>Built together</h3>
+                </article>
+                <article>
+                  <h3>Craft serves the brief</h3>
                   <p>
-                    Flexible teams bring the right creative and production
-                    expertise to each project.
+                    We build the right team and process around the work instead
+                    of forcing every project through one template.
                   </p>
-                </div>
+                </article>
               </div>
             </div>
           </div>
@@ -152,22 +214,22 @@ export default function Home() {
           aria-labelledby="productions-title"
         >
           <div className="section-shell">
-            <div className="section-heading">
-              <h2 id="productions-title">Original work in development.</h2>
+            <div className="production-heading">
+              <h2 id="productions-title">Four titles. One growing slate.</h2>
               <p>
-                A first look at the independent stories shaping the OZ Visions
-                slate.
+                The first independent productions shaping the OZ Visions
+                catalog.
               </p>
             </div>
 
             <div className="productions-grid">
-              <figure className="media-frame">
+              <figure className="media-frame production-image">
                 <Image
                   src="/assets/production-still.webp"
-                  alt="A cinema camera silhouetted in a dark studio beside a pool of reflected light"
+                  alt="A cinema camera silhouetted in a dark studio beside reflected light"
                   width={1200}
                   height={900}
-                  sizes="(max-width: 1024px) 100vw, 65vw"
+                  sizes="(max-width: 980px) 100vw, 64vw"
                 />
               </figure>
 
@@ -175,7 +237,7 @@ export default function Home() {
                 {productions.map((production) => (
                   <article key={production}>
                     <h3>{production}</h3>
-                    <p>Narrative production</p>
+                    <p>Independent production</p>
                   </article>
                 ))}
               </div>
@@ -189,15 +251,15 @@ export default function Home() {
           aria-labelledby="services-title"
         >
           <div className="section-shell">
-            <div className="services-intro">
-              <h2 id="services-title">One team from idea to delivery.</h2>
+            <div className="services-heading">
+              <h2 id="services-title">From first idea to final delivery.</h2>
               <p>
-                Practical production support, shaped around the story and the
-                audience.
+                A focused production partner for commercial stories, media,
+                sound, events, and brand work.
               </p>
             </div>
 
-            <figure className="services-image">
+            <figure className="media-frame services-image">
               <Image
                 src="/assets/services-still.webp"
                 alt="Cinema lighting, sound, and camera equipment arranged in a dark production studio"
@@ -206,11 +268,18 @@ export default function Home() {
               />
             </figure>
 
-            <div className="service-groups">
-              {serviceGroups.map((service) => (
-                <article key={service.title}>
+            <div className="service-grid">
+              {services.map((service, index) => (
+                <article
+                  className={`service service-${index + 1}`}
+                  key={service.title}
+                >
                   <h3>{service.title}</h3>
-                  <p>{service.description}</p>
+                  <ul>
+                    {service.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
                 </article>
               ))}
             </div>
@@ -222,13 +291,14 @@ export default function Home() {
           id="world"
           aria-labelledby="world-title"
         >
-          <div className="world-orbit" aria-hidden="true" />
+          <div className="world-orbit orbit-one" aria-hidden="true" />
+          <div className="world-orbit orbit-two" aria-hidden="true" />
           <div className="section-shell world-content">
             <p className="section-label">An original world</p>
             <h2 id="world-title">The Four Quarters</h2>
             <p>
-              Lore, concept art, and a growing story world. A first public look
-              will arrive here.
+              A growing universe of lore, characters, concept art, and
+              long-form storytelling. The first public look will arrive here.
             </p>
             <span className="status">In development</span>
           </div>
@@ -240,16 +310,14 @@ export default function Home() {
           aria-labelledby="contact-title"
         >
           <div className="section-shell contact-grid">
-            <div>
-              <h2 id="contact-title">Have a project in mind?</h2>
-            </div>
+            <h2 id="contact-title">Bring us the idea.</h2>
             <div className="contact-action">
               <p>
-                Tell us what you are making, who it is for, and where you need
-                support.
+                Share the brief, timeline, and the kind of production support
+                you need.
               </p>
               <a
-                className="button button-primary"
+                className="button button-dark"
                 href="https://www.linkedin.com/company/ozpictures"
                 target="_blank"
                 rel="noreferrer"
