@@ -24,6 +24,7 @@ const fragmentShaderSource = `
   uniform vec2 u_resolution;
   uniform vec2 u_imageResolution;
   uniform vec2 u_mouse;
+  uniform vec2 u_tail;
   uniform float u_time;
   uniform float u_hover;
 
@@ -80,39 +81,65 @@ const fragmentShaderSource = `
     }
 
     float aspect = u_resolution.x / u_resolution.y;
-    vec2 pointerDelta = screenUv - u_mouse;
-    pointerDelta.x *= aspect;
-    float distanceFromPointer = length(pointerDelta);
-    float localMask = smoothstep(0.42, 0.02, distanceFromPointer);
+    vec2 point = vec2(screenUv.x * aspect, screenUv.y);
+    vec2 head = vec2(u_mouse.x * aspect, u_mouse.y);
+    vec2 tail = vec2(u_tail.x * aspect, u_tail.y);
+    vec2 travel = head - tail;
+    float travelLength = length(travel);
+    vec2 tangent = travel / max(travelLength, 0.0001);
+    vec2 normal = vec2(-tangent.y, tangent.x);
 
-    vec2 direction = normalize(pointerDelta + vec2(0.0001));
-    direction.x /= aspect;
+    vec2 fromTail = point - tail;
+    float segmentProgress = clamp(
+      dot(fromTail, travel) / max(dot(travel, travel), 0.0001),
+      0.0,
+      1.0
+    );
+    vec2 nearestTrailPoint = tail + travel * segmentProgress;
+    float trailDistance = length(point - nearestTrailPoint);
+    float headDistance = length(point - head);
 
-    float ripple =
-      sin(distanceFromPointer * 64.0 - u_time * 5.6) *
-      0.0045 *
-      localMask *
-      u_hover;
-    float drift =
-      sin((screenUv.y + u_time * 0.025) * 42.0 + screenUv.x * 8.0) *
-      0.0022 *
-      localMask *
-      u_hover;
+    float motion = smoothstep(0.004, 0.24, travelLength) * u_hover;
+    float headMask = 1.0 - smoothstep(0.018, 0.285, headDistance);
+    float trailRadius = mix(0.07, 0.155, motion);
+    float trailMask =
+      1.0 - smoothstep(0.006, trailRadius, trailDistance);
+    float trailTaper = mix(0.28, 1.0, pow(segmentProgress, 0.58));
+    float liquidMask = max(headMask * 0.82, trailMask * trailTaper);
 
-    screenUv += direction * ripple;
-    screenUv.x += drift;
+    float side = dot(point - nearestTrailPoint, normal);
+    float elasticBend =
+      sin(segmentProgress * 7.2 - u_time * 3.1 + side * 15.0) *
+      trailMask *
+      motion *
+      0.018;
+    float dragStrength =
+      (0.54 + motion * 0.78) *
+      liquidMask *
+      motion;
+
+    vec2 displacement = -travel * dragStrength;
+    displacement += normal * elasticBend;
+    displacement +=
+      (head - point) *
+      headMask *
+      motion *
+      (0.08 + 0.08 * motion);
+    displacement.x /= aspect;
+
+    screenUv += displacement;
     imageUv = clamp(coverUv(screenUv), vec2(0.001), vec2(0.999));
 
     vec2 texel = 1.0 / u_imageResolution;
     vec3 edgeData = edgeGradient(imageUv, texel * 1.35);
     vec2 gradientDirection = normalize(edgeData.xy + vec2(0.0001));
     float edge = smoothstep(0.075, 0.62, edgeData.z);
-    float effectStrength = u_hover * (0.28 + localMask * 0.72);
+    float effectStrength = liquidMask * motion;
 
     vec2 chromaShift =
       gradientDirection *
       texel *
-      (4.0 + 10.0 * localMask) *
+      (2.0 + 7.0 * motion) *
       effectStrength;
 
     float red = texture2D(u_image, clamp(imageUv + chromaShift, 0.001, 0.999)).r;
@@ -129,20 +156,16 @@ const fragmentShaderSource = `
     vec3 rainbow = spectrum(hue);
     float rainbowEdge = edge * effectStrength;
 
-    vec3 color = mix(texture2D(u_image, imageUv).rgb, separated, effectStrength * 0.72);
-    color = mix(color, rainbow, rainbowEdge * (0.72 + localMask * 0.28));
-    color += rainbow * rainbowEdge * localMask * 0.32;
-
-    float waveHighlight =
-      max(sin(distanceFromPointer * 72.0 - u_time * 6.4), 0.0) *
-      localMask *
-      edge *
-      0.12 *
-      u_hover;
-    color += rainbow * waveHighlight;
+    vec3 color = mix(
+      texture2D(u_image, imageUv).rgb,
+      separated,
+      effectStrength * 0.42
+    );
+    color = mix(color, rainbow, rainbowEdge * 0.34);
+    color += rainbow * rainbowEdge * 0.11;
 
     float grain = hash(gl_FragCoord.xy + u_time) - 0.5;
-    color += grain * 0.018 * u_hover;
+    color += grain * 0.009 * effectStrength;
 
     gl_FragColor = vec4(color, 1.0);
   }
@@ -244,6 +267,7 @@ export function HeroShader({ src }: HeroShaderProps) {
       resolution: gl.getUniformLocation(program, "u_resolution"),
       imageResolution: gl.getUniformLocation(program, "u_imageResolution"),
       mouse: gl.getUniformLocation(program, "u_mouse"),
+      tail: gl.getUniformLocation(program, "u_tail"),
       time: gl.getUniformLocation(program, "u_time"),
       hover: gl.getUniformLocation(program, "u_hover"),
     };
@@ -252,8 +276,10 @@ export function HeroShader({ src }: HeroShaderProps) {
     let imageHeight = 1;
     let hoverTarget = 0;
     let hoverValue = 0;
-    let mouseX = 0.5;
-    let mouseY = 0.5;
+    let headX = 0.5;
+    let headY = 0.5;
+    let tailX = 0.5;
+    let tailY = 0.5;
     let targetMouseX = 0.5;
     let targetMouseY = 0.5;
     let frameId = 0;
@@ -283,22 +309,35 @@ export function HeroShader({ src }: HeroShaderProps) {
       }
 
       hoverValue += (hoverTarget - hoverValue) * 0.085;
-      mouseX += (targetMouseX - mouseX) * 0.12;
-      mouseY += (targetMouseY - mouseY) * 0.12;
+      headX += (targetMouseX - headX) * 0.34;
+      headY += (targetMouseY - headY) * 0.34;
+      tailX += (headX - tailX) * 0.055;
+      tailY += (headY - tailY) * 0.055;
+
+      const trailDistance = Math.hypot(headX - tailX, headY - tailY);
 
       gl.useProgram(program);
       gl.uniform1i(uniforms.image, 0);
       gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
       gl.uniform2f(uniforms.imageResolution, imageWidth, imageHeight);
-      gl.uniform2f(uniforms.mouse, mouseX, mouseY);
+      gl.uniform2f(uniforms.mouse, headX, headY);
+      gl.uniform2f(uniforms.tail, tailX, tailY);
       gl.uniform1f(uniforms.time, timestamp * 0.001);
       gl.uniform1f(uniforms.hover, hoverValue);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-      if (hoverTarget > 0 || hoverValue > 0.002) {
+      if (
+        hoverTarget > 0 ||
+        hoverValue > 0.002 ||
+        trailDistance > 0.0001
+      ) {
         frameId = window.requestAnimationFrame(draw);
       } else {
         hoverValue = 0;
+        headX = targetMouseX;
+        headY = targetMouseY;
+        tailX = targetMouseX;
+        tailY = targetMouseY;
         running = false;
       }
     };
@@ -309,14 +348,32 @@ export function HeroShader({ src }: HeroShaderProps) {
       frameId = window.requestAnimationFrame(draw);
     };
 
-    const handlePointerMove = (event: PointerEvent) => {
+    const updatePointerTarget = (event: PointerEvent, snap = false) => {
       const rect = hero.getBoundingClientRect();
-      targetMouseX = (event.clientX - rect.left) / rect.width;
-      targetMouseY = 1 - (event.clientY - rect.top) / rect.height;
+      targetMouseX = Math.min(
+        1,
+        Math.max(0, (event.clientX - rect.left) / rect.width),
+      );
+      targetMouseY = Math.min(
+        1,
+        Math.max(0, 1 - (event.clientY - rect.top) / rect.height),
+      );
+
+      if (snap) {
+        headX = targetMouseX;
+        headY = targetMouseY;
+        tailX = targetMouseX;
+        tailY = targetMouseY;
+      }
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      updatePointerTarget(event);
       startDrawing();
     };
 
-    const handlePointerEnter = () => {
+    const handlePointerEnter = (event: PointerEvent) => {
+      updatePointerTarget(event, true);
       hoverTarget = 1;
       root.classList.add("is-hovering");
       startDrawing();

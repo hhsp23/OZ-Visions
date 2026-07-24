@@ -100,6 +100,9 @@ test("keeps the final site responsive and self contained", async () => {
   assert.match(css, /@media \(max-width:\s*860px\)/);
   assert.match(shader, /getContext\("webgl"/);
   assert.match(shader, /edgeGradient/);
+  assert.match(shader, /uniform vec2 u_tail/);
+  assert.match(shader, /trailDistance/);
+  assert.match(shader, /elasticBend/);
   assert.match(shader, /prefers-reduced-motion:\s*reduce/);
   assert.match(shader, /pointer:\s*coarse/);
   assert.match(shader, /webglcontextlost/);
