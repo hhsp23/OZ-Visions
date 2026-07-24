@@ -2,13 +2,16 @@ import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
-async function render() {
+async function render(pathname = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
+  workerUrl.searchParams.set(
+    "test",
+    `${process.pid}-${Date.now()}-${pathname.replaceAll("/", "-")}`,
+  );
   const { default: worker } = await import(workerUrl.href);
 
   return worker.fetch(
-    new Request("http://localhost/", {
+    new Request(`http://localhost${pathname}`, {
       headers: { accept: "text/html" },
     }),
     {
@@ -23,7 +26,7 @@ async function render() {
   );
 }
 
-test("server renders the OZ Visions temporary site", async () => {
+test("server renders the OZ Visions home page", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
@@ -32,13 +35,50 @@ test("server renders the OZ Visions temporary site", async () => {
   assert.match(html, /<title>OZ Visions USA \| Film, Media &amp; Production<\/title>/i);
   assert.match(html, /Independent productions and creative media/);
   assert.match(html, /Original stories and production craft under one roof\./);
-  assert.match(html, /id="vision"/);
-  assert.match(html, /id="productions"/);
-  assert.match(html, /id="services"/);
-  assert.match(html, /id="world"/);
-  assert.match(html, /id="contact"/);
-  assert.match(html, /https:\/\/www\.linkedin\.com\/company\/ozpictures/);
+  assert.match(html, /href="\/vision"/);
+  assert.match(html, /href="\/about"/);
+  assert.match(html, /href="\/productions"/);
+  assert.match(html, /href="\/services"/);
+  assert.match(html, /href="\/four-quarters"/);
+  assert.match(html, /href="\/contact"/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|\[pending\]|placeholder/i);
+});
+
+test("renders every primary route and production detail", async (t) => {
+  const routes = [
+    ["/vision", "Make the image mean something."],
+    ["/about", "An independent studio with two connected practices."],
+    ["/productions", "Four titles. One growing slate."],
+    ["/productions/manhood", "Manhood"],
+    ["/productions/exegesis", "Exegesis"],
+    ["/productions/ideophobia", "Ideophobia"],
+    ["/productions/the-primus-voyage", "The Primus Voyage"],
+    ["/services", "A focused production partner"],
+    ["/four-quarters", "The Four Quarters"],
+    ["/contact", "Bring us the idea."],
+  ];
+
+  for (const [pathname, expected] of routes) {
+    await t.test(pathname, async () => {
+      const response = await render(pathname);
+      assert.equal(response.status, 200);
+
+      const html = await response.text();
+      assert.match(html, new RegExp(expected.replaceAll(".", "\\."), "i"));
+      assert.match(html, /<header class="site-header">/);
+      assert.match(html, /<footer class="site-footer">/);
+      assert.doesNotMatch(
+        html,
+        /codex-preview|react-loading-skeleton|\[pending\]|placeholder/i,
+      );
+    });
+  }
+});
+
+test("renders a branded not-found page", async () => {
+  const response = await render("/not-a-real-page");
+  assert.equal(response.status, 404);
+  assert.match(await response.text(), /This page is outside the frame\./);
 });
 
 test("keeps the final site responsive and self contained", async () => {

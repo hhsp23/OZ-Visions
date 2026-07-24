@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Cinzel, Jost } from "next/font/google";
 import { headers } from "next/headers";
 import "./globals.css";
+import { SiteFooter } from "./SiteFooter";
+import { SiteHeader } from "./SiteHeader";
 
 const jost = Jost({
   variable: "--font-jost",
@@ -67,7 +69,12 @@ export default function RootLayout({
       <body
         className={`${jost.variable} ${cinzel.variable} antialiased`}
       >
-        {children}
+        <a className="skip-link" href="#main">
+          Skip to content
+        </a>
+        <SiteHeader />
+        <main id="main">{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );

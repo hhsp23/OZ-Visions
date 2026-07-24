@@ -7,7 +7,17 @@ type NavigationItem = {
   href: string;
 };
 
-export function MobileMenu({ items }: { items: NavigationItem[] }) {
+function isCurrentPath(pathname: string, href: string) {
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+export function MobileMenu({
+  items,
+  currentPath,
+}: {
+  items: readonly NavigationItem[];
+  currentPath: string;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -41,16 +51,27 @@ export function MobileMenu({ items }: { items: NavigationItem[] }) {
         className={`mobile-menu-panel${isOpen ? " is-open" : ""}`}
         id="mobile-menu-panel"
       >
-        {items.map((item) => (
-          <a
-            key={item.href}
-            href={item.href}
-            onClick={() => setIsOpen(false)}
-          >
-            {item.label}
-          </a>
-        ))}
-        <a href="#contact" onClick={() => setIsOpen(false)}>
+        {items.map((item) => {
+          const isActive = isCurrentPath(currentPath, item.href);
+
+          return (
+            <a
+              className={isActive ? "is-active" : undefined}
+              key={item.href}
+              href={item.href}
+              aria-current={isActive ? "page" : undefined}
+              onClick={() => setIsOpen(false)}
+            >
+              {item.label}
+            </a>
+          );
+        })}
+        <a
+          className={currentPath === "/contact" ? "is-active" : undefined}
+          href="/contact"
+          aria-current={currentPath === "/contact" ? "page" : undefined}
+          onClick={() => setIsOpen(false)}
+        >
           Start a project
         </a>
       </div>
