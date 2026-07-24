@@ -15,7 +15,7 @@ const dmSans = DM_Sans({
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   "https://hhsp23.github.io/OZ-Visions/";
-const socialImage = siteAsset("/og.png");
+const socialImage = siteAsset("/assets/oz-ghost-banner.webp");
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
     images: [
       {
         url: socialImage,
-        width: 1734,
-        height: 907,
-        alt: "OZ Visions USA",
+        width: 2880,
+        height: 1620,
+        alt: "OZ Visions USA cinematic ghost landscape",
       },
     ],
   },
