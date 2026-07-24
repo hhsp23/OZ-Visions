@@ -286,7 +286,7 @@ a {
   align-items: baseline;
   justify-content: center;
   font-family: var(--font-cabinet);
-  font-size: calc((100vw - 120px) * 0.215);
+  font-size: calc((100vw - 120px) * 0.235);
   font-weight: 300;
   letter-spacing: -0.075em;
   line-height: 0.72;
@@ -1510,7 +1510,7 @@ a {
   }
 
   .hero h1 {
-    font-size: calc((100vw - 80px) * 0.215);
+    font-size: calc((100vw - 80px) * 0.235);
   }
 
   .desktop-nav {
@@ -1629,7 +1629,7 @@ a {
   }
 
   .hero h1 {
-    font-size: calc((100vw - 40px) * 0.215);
+    font-size: calc((100vw - 40px) * 0.235);
   }
 
   .hero-tagline {
