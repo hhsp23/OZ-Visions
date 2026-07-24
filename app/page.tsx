@@ -40,19 +40,21 @@ export default function Home() {
 
         <div className="hero-content">
           <h1 id="hero-title">
-            <span>OZ</span>
-            <span>Visions</span>
+            <span className="hero-title-mark">OZ</span>
+            <span className="hero-title-name">Visions</span>
           </h1>
-          <p className="hero-tagline">
-            Independent productions and creative media
-          </p>
-          <div className="hero-actions">
-            <Link className="button button-primary" href="/productions">
-              View productions
-            </Link>
-            <Link className="button button-secondary" href="/contact">
-              Start a project
-            </Link>
+          <div className="hero-lower">
+            <p className="hero-tagline">
+              Independent productions and creative media
+            </p>
+            <div className="hero-actions">
+              <Link className="button button-primary" href="/productions">
+                View productions
+              </Link>
+              <Link className="button button-secondary" href="/contact">
+                Start a project
+              </Link>
+            </div>
           </div>
         </div>
         <span className="hero-interaction-hint" aria-hidden="true">

@@ -1,18 +1,12 @@
 import type { Metadata } from "next";
-import { Cinzel, Jost } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import { headers } from "next/headers";
 import "./globals.css";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
 
-const jost = Jost({
-  variable: "--font-jost",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const cinzel = Cinzel({
-  variable: "--font-cinzel",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
   display: "swap",
 });
@@ -66,9 +60,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body
-        className={`${jost.variable} ${cinzel.variable} antialiased`}
-      >
+      <head>
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@300,400,500,700,800&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className={`${dmSans.variable} antialiased`}>
         <a className="skip-link" href="#main">
           Skip to content
         </a>

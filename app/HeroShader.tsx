@@ -99,11 +99,13 @@ const fragmentShaderSource = `
     float trailDistance = length(point - nearestTrailPoint);
     float headDistance = length(point - head);
 
-    float motion = smoothstep(0.004, 0.24, travelLength) * u_hover;
-    float headMask = 1.0 - smoothstep(0.018, 0.285, headDistance);
-    float trailRadius = mix(0.07, 0.155, motion);
+    float motion =
+      pow(smoothstep(0.00008, 0.035, travelLength), 0.38) *
+      u_hover;
+    float headMask = 1.0 - smoothstep(0.008, 0.115, headDistance);
+    float trailRadius = mix(0.022, 0.058, motion);
     float trailMask =
-      1.0 - smoothstep(0.006, trailRadius, trailDistance);
+      1.0 - smoothstep(0.003, trailRadius, trailDistance);
     float trailTaper = mix(0.28, 1.0, pow(segmentProgress, 0.58));
     float liquidMask = max(headMask * 0.82, trailMask * trailTaper);
 
@@ -133,13 +135,13 @@ const fragmentShaderSource = `
     vec2 texel = 1.0 / u_imageResolution;
     vec3 edgeData = edgeGradient(imageUv, texel * 1.35);
     vec2 gradientDirection = normalize(edgeData.xy + vec2(0.0001));
-    float edge = smoothstep(0.075, 0.62, edgeData.z);
+    float edge = smoothstep(0.045, 0.5, edgeData.z);
     float effectStrength = liquidMask * motion;
 
     vec2 chromaShift =
       gradientDirection *
       texel *
-      (2.0 + 7.0 * motion) *
+      (3.0 + 10.0 * motion) *
       effectStrength;
 
     float red = texture2D(u_image, clamp(imageUv + chromaShift, 0.001, 0.999)).r;
@@ -159,10 +161,10 @@ const fragmentShaderSource = `
     vec3 color = mix(
       texture2D(u_image, imageUv).rgb,
       separated,
-      effectStrength * 0.42
+      effectStrength * 0.58
     );
-    color = mix(color, rainbow, rainbowEdge * 0.34);
-    color += rainbow * rainbowEdge * 0.11;
+    color = mix(color, rainbow, rainbowEdge * 0.56);
+    color += rainbow * rainbowEdge * 0.18;
 
     float grain = hash(gl_FragCoord.xy + u_time) - 0.5;
     color += grain * 0.009 * effectStrength;
