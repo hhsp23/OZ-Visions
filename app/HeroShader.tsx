@@ -457,6 +457,7 @@ export function HeroShader({ src }: HeroShaderProps) {
         alt=""
         fill
         priority
+        unoptimized
         sizes="100vw"
       />
       <canvas

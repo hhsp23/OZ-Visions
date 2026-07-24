@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { PageHero } from "../PageHero";
 import { productions } from "../site-data";
+import { siteAsset, siteHref } from "../site-paths";
 
 export const metadata: Metadata = {
   title: "Productions | OZ Visions USA",
@@ -23,18 +23,19 @@ export default function ProductionsPage() {
         <div className="section-shell production-index-layout">
           <figure className="media-frame production-index-image">
             <Image
-              src="/assets/production-still.webp"
+              src={siteAsset("/assets/production-still.webp")}
               alt="A cinema camera and reflected studio light"
               fill
               priority
+              unoptimized
               sizes="(max-width: 900px) 100vw, 52vw"
             />
           </figure>
 
           <div className="production-index">
             {productions.map((production, index) => (
-              <Link
-                href={`/productions/${production.slug}`}
+              <a
+                href={siteHref(`/productions/${production.slug}`)}
                 key={production.slug}
               >
                 <span>{String(index + 1).padStart(2, "0")}</span>
@@ -43,7 +44,7 @@ export default function ProductionsPage() {
                   <p>{production.description}</p>
                 </div>
                 <strong>View</strong>
-              </Link>
+              </a>
             ))}
           </div>
         </div>
@@ -52,9 +53,9 @@ export default function ProductionsPage() {
       <section className="page-cta paper-section">
         <div className="section-shell page-cta-grid">
           <h2>Production updates will be added as the slate develops.</h2>
-          <Link className="button button-dark" href="/about">
+          <a className="button button-dark" href={siteHref("/about")}>
             About the studio
-          </Link>
+          </a>
         </div>
       </section>
     </>

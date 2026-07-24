@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { PageHero } from "../PageHero";
+import { siteAsset, siteHref } from "../site-paths";
 
 export const metadata: Metadata = {
   title: "About | OZ Visions USA",
@@ -37,10 +37,11 @@ export default function AboutPage() {
         <div className="section-shell inner-media-grid">
           <figure className="media-frame">
             <Image
-              src="/assets/production-still.webp"
+              src={siteAsset("/assets/production-still.webp")}
               alt="A cinema camera silhouetted in a dark production studio"
               width={1200}
               height={900}
+              unoptimized
               sizes="(max-width: 900px) 100vw, 56vw"
             />
           </figure>
@@ -69,9 +70,9 @@ export default function AboutPage() {
       <section className="page-cta paper-section">
         <div className="section-shell page-cta-grid">
           <h2>Work with the studio.</h2>
-          <Link className="button button-dark" href="/contact">
+          <a className="button button-dark" href={siteHref("/contact")}>
             Start a conversation
-          </Link>
+          </a>
         </div>
       </section>
     </>

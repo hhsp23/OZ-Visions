@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { PageHero } from "../PageHero";
 import { services } from "../site-data";
+import { siteAsset, siteHref } from "../site-paths";
 
 export const metadata: Metadata = {
   title: "Commercial Services | OZ Visions USA",
@@ -23,10 +23,11 @@ export default function ServicesPage() {
         <div className="section-shell">
           <figure className="media-frame services-page-image">
             <Image
-              src="/assets/services-still.webp"
+              src={siteAsset("/assets/services-still.webp")}
               alt="Camera, sound, and lighting equipment in a production studio"
               fill
               priority
+              unoptimized
               sizes="(max-width: 900px) 100vw, 90vw"
             />
           </figure>
@@ -62,9 +63,9 @@ export default function ServicesPage() {
       <section className="page-cta paper-section">
         <div className="section-shell page-cta-grid">
           <h2>Tell us what the project needs.</h2>
-          <Link className="button button-dark" href="/contact">
+          <a className="button button-dark" href={siteHref("/contact")}>
             Start a project
-          </Link>
+          </a>
         </div>
       </section>
     </>

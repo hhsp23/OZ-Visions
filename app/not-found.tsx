@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { siteHref } from "./site-paths";
 
 export default function NotFound() {
   return (
@@ -10,9 +10,9 @@ export default function NotFound() {
           The address may have changed, or the page may not be part of the
           current OZ Visions site.
         </p>
-        <Link className="button button-primary" href="/">
+        <a className="button button-primary" href={siteHref("/")}>
           Return home
-        </Link>
+        </a>
       </div>
     </section>
   );

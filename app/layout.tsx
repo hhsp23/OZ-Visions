@@ -1,9 +1,10 @@
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
-import { headers } from "next/headers";
 import "./globals.css";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
+import { siteAsset } from "./site-paths";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -11,47 +12,42 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const requestHeaders = await headers();
-  const host =
-    requestHeaders.get("x-forwarded-host") ??
-    requestHeaders.get("host") ??
-    "oz-visions-usa.puppetx2.chatgpt.site";
-  const protocol =
-    requestHeaders.get("x-forwarded-proto")?.split(",")[0] ?? "https";
-  const socialImage = `${protocol}://${host}/og.png`;
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  "https://hhsp23.github.io/OZ-Visions/";
+const socialImage = siteAsset("/og.png");
 
-  return {
-    title: "OZ Visions USA | Film, Media & Production",
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title: "OZ Visions USA | Film, Media & Production",
+  description:
+    "OZ Visions USA develops independent productions and creates commercial film, media, podcasts, brand work, and live coverage.",
+  icons: {
+    icon: siteAsset("/favicon.ico"),
+    shortcut: siteAsset("/favicon.ico"),
+  },
+  openGraph: {
+    title: "OZ Visions USA",
     description:
-      "OZ Visions USA develops independent productions and creates commercial film, media, podcasts, brand work, and live coverage.",
-    icons: {
-      icon: "/favicon.ico",
-      shortcut: "/favicon.ico",
-    },
-    openGraph: {
-      title: "OZ Visions USA",
-      description:
-        "Independent productions and creative media from Austin, Texas.",
-      type: "website",
-      images: [
-        {
-          url: socialImage,
-          width: 1734,
-          height: 907,
-          alt: "OZ Visions USA",
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: "OZ Visions USA",
-      description:
-        "Independent productions and creative media from Austin, Texas.",
-      images: [socialImage],
-    },
-  };
-}
+      "Independent productions and creative media from Austin, Texas.",
+    type: "website",
+    images: [
+      {
+        url: socialImage,
+        width: 1734,
+        height: 907,
+        alt: "OZ Visions USA",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "OZ Visions USA",
+    description:
+      "Independent productions and creative media from Austin, Texas.",
+    images: [socialImage],
+  },
+};
 
 export default function RootLayout({
   children,
@@ -67,7 +63,14 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${dmSans.variable} antialiased`}>
+      <body
+        className={`${dmSans.variable} antialiased`}
+        style={
+          {
+            "--noise-image": `url("${siteAsset("/assets/noise.webp")}")`,
+          } as CSSProperties
+        }
+      >
         <a className="skip-link" href="#main">
           Skip to content
         </a>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { PageHero } from "../PageHero";
+import { siteHref } from "../site-paths";
 
 export const metadata: Metadata = {
   title: "The Four Quarters | OZ Visions USA",
@@ -36,9 +36,9 @@ export default function FourQuartersPage() {
       <section className="page-cta paper-section">
         <div className="section-shell page-cta-grid">
           <h2>Return to the wider OZ Visions slate.</h2>
-          <Link className="button button-dark" href="/productions">
+          <a className="button button-dark" href={siteHref("/productions")}>
             View productions
-          </Link>
+          </a>
         </div>
       </section>
     </>

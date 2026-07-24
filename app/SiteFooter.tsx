@@ -1,21 +1,21 @@
-import Link from "next/link";
+import { siteHref } from "./site-paths";
 
 export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="footer-shell">
-        <Link
+        <a
           className="wordmark footer-wordmark"
-          href="/"
+          href={siteHref("/")}
           aria-label="OZ Visions USA home"
         >
           <span>OZ</span>
           <span>Visions</span>
-        </Link>
+        </a>
         <nav className="footer-nav" aria-label="Footer navigation">
-          <Link href="/productions">Productions</Link>
-          <Link href="/services">Services</Link>
-          <Link href="/contact">Contact</Link>
+          <a href={siteHref("/productions")}>Productions</a>
+          <a href={siteHref("/services")}>Services</a>
+          <a href={siteHref("/contact")}>Contact</a>
         </nav>
         <div className="footer-meta">
           <p>Austin, Texas</p>

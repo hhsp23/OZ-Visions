@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
 import { HeroShader } from "./HeroShader";
 import { productions, services } from "./site-data";
+import { siteAsset, siteHref } from "./site-paths";
 
 const chapters = [
   {
@@ -35,7 +35,7 @@ export default function Home() {
   return (
     <>
       <section className="hero" aria-labelledby="hero-title">
-        <HeroShader src="/assets/oz-ghost-banner.webp" />
+        <HeroShader src={siteAsset("/assets/oz-ghost-banner.webp")} />
         <div className="hero-shade" aria-hidden="true" />
 
         <div className="hero-content">
@@ -48,12 +48,18 @@ export default function Home() {
               Independent productions and creative media
             </p>
             <div className="hero-actions">
-              <Link className="button button-primary" href="/productions">
+              <a
+                className="button button-primary"
+                href={siteHref("/productions")}
+              >
                 View productions
-              </Link>
-              <Link className="button button-secondary" href="/contact">
+              </a>
+              <a
+                className="button button-secondary"
+                href={siteHref("/contact")}
+              >
                 Start a project
-              </Link>
+              </a>
             </div>
           </div>
         </div>
@@ -82,9 +88,9 @@ export default function Home() {
       <nav className="chapter-shell" aria-label="Explore OZ Visions">
         <div className="chapter-grid chapter-grid-full">
           {chapters.map((chapter, index) => (
-            <Link
+            <a
               className={`chapter chapter-${index + 1}`}
-              href={chapter.href}
+              href={siteHref(chapter.href)}
               key={chapter.href}
             >
               <span className="chapter-title">{chapter.title}</span>
@@ -92,7 +98,7 @@ export default function Home() {
                 {chapter.description}
               </span>
               <span className="chapter-action">Explore</span>
-            </Link>
+            </a>
           ))}
         </div>
       </nav>
@@ -113,9 +119,12 @@ export default function Home() {
               studio practice, bringing the same narrative care to client work,
               podcasts, live coverage, and brand development.
             </p>
-            <Link className="text-link dark-text-link" href="/vision">
+            <a
+              className="text-link dark-text-link"
+              href={siteHref("/vision")}
+            >
               Read the vision
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -132,25 +141,26 @@ export default function Home() {
           <div className="productions-grid">
             <figure className="media-frame production-image">
               <Image
-                src="/assets/production-still.webp"
+                src={siteAsset("/assets/production-still.webp")}
                 alt="A cinema camera silhouetted in a dark studio beside reflected light"
                 width={1200}
                 height={900}
+                unoptimized
                 sizes="(max-width: 980px) 100vw, 64vw"
               />
             </figure>
 
             <div className="production-list">
               {productions.map((production) => (
-                <Link
-                  href={`/productions/${production.slug}`}
+                <a
+                  href={siteHref(`/productions/${production.slug}`)}
                   key={production.slug}
                 >
                   <article>
                     <h3>{production.title}</h3>
                     <p>View production</p>
                   </article>
-                </Link>
+                </a>
               ))}
             </div>
           </div>
@@ -169,9 +179,10 @@ export default function Home() {
 
           <figure className="media-frame services-image">
             <Image
-              src="/assets/services-still.webp"
+              src={siteAsset("/assets/services-still.webp")}
               alt="Cinema lighting, sound, and camera equipment arranged in a dark production studio"
               fill
+              unoptimized
               sizes="(max-width: 720px) 100vw, 90vw"
             />
           </figure>
@@ -188,9 +199,12 @@ export default function Home() {
             ))}
           </div>
 
-          <Link className="section-text-link text-link" href="/services">
+          <a
+            className="section-text-link text-link"
+            href={siteHref("/services")}
+          >
             See all services
-          </Link>
+          </a>
         </div>
       </section>
 
@@ -204,9 +218,9 @@ export default function Home() {
             A growing universe of lore, characters, concept art, and long-form
             storytelling.
           </p>
-          <Link className="text-link" href="/four-quarters">
+          <a className="text-link" href={siteHref("/four-quarters")}>
             Enter the world
-          </Link>
+          </a>
         </div>
       </section>
 
@@ -218,9 +232,9 @@ export default function Home() {
               Share the brief, timeline, and the kind of production support you
               need.
             </p>
-            <Link className="button button-dark" href="/contact">
+            <a className="button button-dark" href={siteHref("/contact")}>
               Start a project
-            </Link>
+            </a>
           </div>
         </div>
       </section>

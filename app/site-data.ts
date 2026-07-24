@@ -33,6 +33,8 @@ export const productions = [
   },
 ] as const;
 
+export type Production = (typeof productions)[number];
+
 export const services = [
   {
     title: "Creative production",

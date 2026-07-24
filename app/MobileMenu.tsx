@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { siteHref } from "./site-paths";
 
 type NavigationItem = {
   label: string;
@@ -58,7 +59,7 @@ export function MobileMenu({
             <a
               className={isActive ? "is-active" : undefined}
               key={item.href}
-              href={item.href}
+              href={siteHref(item.href)}
               aria-current={isActive ? "page" : undefined}
               onClick={() => setIsOpen(false)}
             >
@@ -68,7 +69,7 @@ export function MobileMenu({
         })}
         <a
           className={currentPath === "/contact" ? "is-active" : undefined}
-          href="/contact"
+          href={siteHref("/contact")}
           aria-current={currentPath === "/contact" ? "page" : undefined}
           onClick={() => setIsOpen(false)}
         >

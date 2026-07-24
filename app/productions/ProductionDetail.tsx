@@ -1,42 +1,13 @@
-import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { PageHero } from "../../PageHero";
-import { getProduction, productions } from "../../site-data";
+import { PageHero } from "../PageHero";
+import type { Production } from "../site-data";
+import { siteAsset, siteHref } from "../site-paths";
 
-type ProductionPageProps = {
-  params: Promise<{ slug: string }>;
+type ProductionDetailProps = {
+  production: Production;
 };
 
-export function generateStaticParams() {
-  return productions.map((production) => ({ slug: production.slug }));
-}
-
-export async function generateMetadata({
-  params,
-}: ProductionPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const production = getProduction(slug);
-
-  if (!production) {
-    return { title: "Production not found | OZ Visions USA" };
-  }
-
-  return {
-    title: `${production.title} | OZ Visions USA`,
-    description: production.description,
-  };
-}
-
-export default async function ProductionPage({ params }: ProductionPageProps) {
-  const { slug } = await params;
-  const production = getProduction(slug);
-
-  if (!production) {
-    notFound();
-  }
-
+export function ProductionDetail({ production }: ProductionDetailProps) {
   return (
     <>
       <PageHero
@@ -50,16 +21,17 @@ export default async function ProductionPage({ params }: ProductionPageProps) {
 
       <section className="inner-section production-detail">
         <div className="section-shell">
-          <Link className="back-link" href="/productions">
+          <a className="back-link" href={siteHref("/productions")}>
             ← All productions
-          </Link>
+          </a>
 
           <figure className="media-frame production-detail-image">
             <Image
-              src="/assets/production-still.webp"
+              src={siteAsset("/assets/production-still.webp")}
               alt="A cinema camera and reflected studio light representing the OZ Visions production slate"
               fill
               priority
+              unoptimized
               sizes="(max-width: 900px) 100vw, 90vw"
             />
           </figure>
@@ -69,9 +41,9 @@ export default async function ProductionPage({ params }: ProductionPageProps) {
             <div>
               <p className="inner-lead">{production.description}</p>
               <p>
-                This page is prepared to hold the project’s synopsis, trailer,
-                stills, credits, and release information as each item is
-                approved for publication.
+                This page is prepared to hold the project&apos;s synopsis,
+                trailer, stills, credits, and release information as each item
+                is approved for publication.
               </p>
               <dl className="project-facts">
                 <div>
@@ -95,9 +67,9 @@ export default async function ProductionPage({ params }: ProductionPageProps) {
       <section className="page-cta paper-section">
         <div className="section-shell page-cta-grid">
           <h2>Explore the complete production slate.</h2>
-          <Link className="button button-dark" href="/productions">
+          <a className="button button-dark" href={siteHref("/productions")}>
             All productions
-          </Link>
+          </a>
         </div>
       </section>
     </>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { PageHero } from "../PageHero";
+import { siteHref } from "../site-paths";
 
 export const metadata: Metadata = {
   title: "Contact | OZ Visions USA",
@@ -43,9 +43,9 @@ export default function ContactPage() {
       <section className="page-cta paper-section">
         <div className="section-shell page-cta-grid">
           <h2>Looking for a specific service?</h2>
-          <Link className="button button-dark" href="/services">
+          <a className="button button-dark" href={siteHref("/services")}>
             Explore services
-          </Link>
+          </a>
         </div>
       </section>
     </>
