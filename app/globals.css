@@ -283,7 +283,7 @@ a {
   margin: 0;
   display: flex;
   align-items: baseline;
-  justify-content: center;
+  justify-content: space-between;
   font-family: var(--font-cabinet);
   font-size: clamp(7rem, 18.2vw, 23rem);
   font-weight: 300;
@@ -303,7 +303,7 @@ a {
 }
 
 .hero-title-name {
-  margin-left: 0.09em;
+  margin-left: 0;
   font-weight: 300;
 }
 
