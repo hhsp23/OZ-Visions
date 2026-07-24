@@ -11,7 +11,7 @@
   --quiet: #76767a;
   --line: rgb(255 255 255 / 15%);
   --dark-line: rgb(7 7 9 / 18%);
-  --shell: min(1400px, calc(100% - 80px));
+  --shell: min(1800px, calc(100% - 48px));
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --spectrum: linear-gradient(
     90deg,
@@ -1472,7 +1472,7 @@ a {
 
 @media (max-width: 1080px) {
   :root {
-    --shell: min(100% - 48px, 940px);
+    --shell: calc(100% - 40px);
   }
 
   .desktop-nav {
@@ -1523,7 +1523,7 @@ a {
 
 @media (max-width: 860px) {
   :root {
-    --shell: calc(100% - 32px);
+    --shell: calc(100% - 28px);
   }
 
   .nav-shell {

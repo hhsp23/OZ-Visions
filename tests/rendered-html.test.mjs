@@ -95,6 +95,7 @@ test("keeps the final site responsive and self contained", async () => {
   assert.match(page, /sizes=/);
   assert.match(layout, /OZ Visions USA/);
   assert.match(css, /min-height:\s*100dvh/);
+  assert.match(css, /--shell:\s*min\(1800px,\s*calc\(100%\s*-\s*48px\)\)/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /@media \(max-width:\s*860px\)/);
   assert.match(shader, /getContext\("webgl"/);
