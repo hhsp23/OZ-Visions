@@ -283,9 +283,9 @@ a {
   margin: 0;
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
+  justify-content: center;
   font-family: var(--font-cabinet);
-  font-size: clamp(7rem, 18.2vw, 23rem);
+  font-size: clamp(7rem, 21vw, 30rem);
   font-weight: 300;
   letter-spacing: -0.075em;
   line-height: 0.72;
@@ -303,7 +303,7 @@ a {
 }
 
 .hero-title-name {
-  margin-left: 0;
+  margin-left: 0.09em;
   font-weight: 300;
 }
 
@@ -1624,7 +1624,7 @@ a {
   }
 
   .hero h1 {
-    font-size: clamp(5.4rem, 18.2vw, 9.8rem);
+    font-size: clamp(5.4rem, 20vw, 10.6rem);
   }
 
   .hero-tagline {
