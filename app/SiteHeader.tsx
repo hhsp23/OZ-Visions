@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MobileMenu } from "./MobileMenu";
@@ -15,9 +16,14 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <nav className="nav-shell" aria-label="Primary navigation">
-        <Link className="wordmark" href="/" aria-label="OZ Visions USA home">
-          <span>OZ</span>
-          <span>Visions</span>
+        <Link className="header-logo" href="/" aria-label="OZ Visions USA home">
+          <Image
+            src="/assets/oz-visions-logo.png"
+            alt=""
+            width={469}
+            height={358}
+            priority
+          />
         </Link>
 
         <div className="desktop-nav">

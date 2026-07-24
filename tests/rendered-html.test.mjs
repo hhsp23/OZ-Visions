@@ -36,6 +36,7 @@ test("server renders the OZ Visions home page", async () => {
   assert.match(html, /Independent productions and creative media/);
   assert.match(html, /Original stories and production craft under one roof\./);
   assert.match(html, /\/assets\/oz-ghost-banner\.webp/);
+  assert.match(html, /oz-visions-logo\.png/);
   assert.match(html, /href="\/vision"/);
   assert.match(html, /href="\/about"/);
   assert.match(html, /href="\/productions"/);
@@ -113,6 +114,7 @@ test("keeps the final site responsive and self contained", async () => {
   await Promise.all([
     access(new URL("../public/assets/oz-horizon.webp", import.meta.url)),
     access(new URL("../public/assets/oz-ghost-banner.webp", import.meta.url)),
+    access(new URL("../public/assets/oz-visions-logo.png", import.meta.url)),
     access(new URL("../public/assets/production-still.webp", import.meta.url)),
     access(new URL("../public/assets/services-still.webp", import.meta.url)),
     access(new URL("../public/assets/noise.webp", import.meta.url)),
