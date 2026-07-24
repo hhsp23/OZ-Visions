@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { HeroShader } from "./HeroShader";
 import { productions, services } from "./site-data";
 
 const chapters = [
@@ -34,14 +35,7 @@ export default function Home() {
   return (
     <>
       <section className="hero" aria-labelledby="hero-title">
-        <Image
-          className="hero-image"
-          src="/assets/oz-horizon.webp"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-        />
+        <HeroShader src="/assets/oz-ghost-banner.webp" />
         <div className="hero-shade" aria-hidden="true" />
 
         <div className="hero-content">
@@ -61,6 +55,9 @@ export default function Home() {
             </Link>
           </div>
         </div>
+        <span className="hero-interaction-hint" aria-hidden="true">
+          Move across the image
+        </span>
       </section>
 
       <div className="spectrum-rule" aria-hidden="true" />

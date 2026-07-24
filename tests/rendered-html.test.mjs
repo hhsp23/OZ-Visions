@@ -35,6 +35,7 @@ test("server renders the OZ Visions home page", async () => {
   assert.match(html, /<title>OZ Visions USA \| Film, Media &amp; Production<\/title>/i);
   assert.match(html, /Independent productions and creative media/);
   assert.match(html, /Original stories and production craft under one roof\./);
+  assert.match(html, /\/assets\/oz-ghost-banner\.webp/);
   assert.match(html, /href="\/vision"/);
   assert.match(html, /href="\/about"/);
   assert.match(html, /href="\/productions"/);
@@ -82,9 +83,10 @@ test("renders a branded not-found page", async () => {
 });
 
 test("keeps the final site responsive and self contained", async () => {
-  const [page, layout, css, packageJson] = await Promise.all([
+  const [page, layout, shader, css, packageJson] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/HeroShader.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
   ]);
@@ -95,10 +97,16 @@ test("keeps the final site responsive and self contained", async () => {
   assert.match(css, /min-height:\s*100dvh/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /@media \(max-width:\s*860px\)/);
+  assert.match(shader, /getContext\("webgl"/);
+  assert.match(shader, /edgeGradient/);
+  assert.match(shader, /prefers-reduced-motion:\s*reduce/);
+  assert.match(shader, /pointer:\s*coarse/);
+  assert.match(shader, /webglcontextlost/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
 
   await Promise.all([
     access(new URL("../public/assets/oz-horizon.webp", import.meta.url)),
+    access(new URL("../public/assets/oz-ghost-banner.webp", import.meta.url)),
     access(new URL("../public/assets/production-still.webp", import.meta.url)),
     access(new URL("../public/assets/services-still.webp", import.meta.url)),
     access(new URL("../public/assets/noise.webp", import.meta.url)),
