@@ -9,20 +9,26 @@ async function render(pathname = "/") {
     `${process.pid}-${Date.now()}-${pathname.replaceAll("/", "-")}`,
   );
   const { default: worker } = await import(workerUrl.href);
+  const request = new Request(`http://localhost${pathname}`, {
+    headers: { accept: "text/html" },
+  });
+  const executionContext = {
+    waitUntil() {},
+    passThroughOnException() {},
+  };
+
+  if (typeof worker === "function") {
+    return worker(request, executionContext);
+  }
 
   return worker.fetch(
-    new Request(`http://localhost${pathname}`, {
-      headers: { accept: "text/html" },
-    }),
+    request,
     {
       ASSETS: {
         fetch: async () => new Response("Not found", { status: 404 }),
       },
     },
-    {
-      waitUntil() {},
-      passThroughOnException() {},
-    },
+    executionContext,
   );
 }
 
